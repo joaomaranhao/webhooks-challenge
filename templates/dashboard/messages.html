@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}WhatsAuto | Messages{% endblock title %}
+
+{% block content %}
+<div class="p-6">
+  <h1 class="text-2xl text-center font-bold mb-4">Mensagens da Conversa</h1>
+
+  <div class="mb-6">
+    <p><strong>ID:</strong> {{ conversation.id }}</p>
+    <p><strong>Status:</strong>
+      <span class="badge {% if conversation.state == 'CLOSED' %}badge-error{% else %}badge-success{% endif %}">
+        {{ conversation.state }}
+      </span>
+    </p>
+    <p><strong>Criada em:</strong> {{ conversation.created_at|date:"Y-m-d H:i:s" }}</p>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table class="table table-zebra w-full">
+      <thead>
+        <tr>
+          <th>Direção</th>
+          <th>Conteúdo</th>
+          <th>Data</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for msg in messages %}
+        <tr>
+          <td>
+            <span class="badge {% if msg.direction == 'SENT' %}badge-info{% else %}badge-accent{% endif %}">
+              {{ msg.direction }}
+            </span>
+          </td>
+          <td>{{ msg.content }}</td>
+          <td>{{ msg.timestamp|date:"Y-m-d H:i:s" }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="3" class="text-center">Nenhuma mensagem nesta conversa.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="mt-6">
+    <a href="{% url 'conversations' %}" class="btn btn-secondary">Voltar</a>
+  </div>
+</div>
+{% endblock content %}
